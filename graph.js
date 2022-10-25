@@ -55,15 +55,14 @@ class Graph{
     }
 }
 
-const myGraph = new Graph();
-myGraph.addNode('Chidubem');
-myGraph.addNode('Esther');
-myGraph.addNode('Chioma');
-myGraph.addNode('Musa');
-myGraph.addEdge('Chidubem', 'Esther');
-myGraph.addEdge('Esther', 'Chidubem');
-myGraph.addEdge('Musa', 'Chioma');
-myGraph.addEdge('Chioma', 'Esther');
-myGraph.addEdge('Chidubem', 'Chioma');
-myGraph.removeNode('Esther');
-console.log(myGraph.bfs('Chidubem'))
+const NodeObj = {}
+function returnNode(node){
+    NodeObj[node.val] = [];
+    for (let prop of node.neighbors){
+        NodeObj[node.val].push(prop.val);
+        returnNode(prop);
+    }
+    console.log(NodeObj);
+}
+
+console.log(returnNode())
