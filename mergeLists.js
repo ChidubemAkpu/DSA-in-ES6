@@ -1,4 +1,4 @@
-
+'use strict'
 var mergeTwoLists = function(list1, list2) {
     list1 = getArr(list1);
     list2 = getArr(list2);

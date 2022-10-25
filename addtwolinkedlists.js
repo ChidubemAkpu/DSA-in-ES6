@@ -1,5 +1,4 @@
-
-
+'use strict'
  var addTwoNumbers = function(l1, l2) {
     l1 = getNumbers(l1);
     l2 = getNumbers(l2);
