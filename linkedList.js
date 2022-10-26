@@ -125,6 +125,29 @@ class LinkedList {
     }
 
     
+    reverseList(){
+        let currNode = this.head;
+        let nextNode = null;
+        let prevNode = null;
+        if (!currNode) return;
+
+        while(currNode){
+            nextNode = currNode.next;
+            currNode.next = prevNode;
+            prevNode = currNode;
+            currNode = nextNode;
+            nextNode = null
+        }
+        this.head = prevNode;
+        return this;
+    }
 }
+
+let theList = new LinkedList();
+theList.addNode(8);
+theList.addNode(9);
+theList.addNode(10);
+theList.addNode(45);
+console.log(theList.listAllNodes());
 
 
