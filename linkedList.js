@@ -143,11 +143,6 @@ class LinkedList {
     }
 }
 
-let theList = new LinkedList();
-theList.addNode(8);
-theList.addNode(9);
-theList.addNode(10);
-theList.addNode(45);
-console.log(theList.listAllNodes());
+
 
 
