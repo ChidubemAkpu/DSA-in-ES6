@@ -34,17 +34,19 @@ class LinkedList {
         
         let prev;
         let curr = this.head;
+
+        if (this.size === 1){
+            this.head = null;
+            this.size--;
+            return curr.element;
+        }
         while(curr.next){
             prev = curr;
             curr = curr.next;
         }
-        if (prev){
-            prev.next = null;
-            this.size--;
-            return;
-        }
-        this.head = null;
-        this.size--; 
+        prev.next = null;
+        this.size--;
+        return curr.element;
     }
 
     removeAll(){
@@ -56,12 +58,14 @@ class LinkedList {
         if (index >= this.size || index < 0){
             return 'Index is out of Range!!'
         } else if (index === this.size - 1){
-            this.removeLastNode();
-            return;
+            return this.removeLastNode();
         } else if (index === 0){
-            let curr = this.head;
-            curr = curr.next;
+            let prev = this.head;
+            let curr = prev.next;
             this.head = curr;
+            this.size--;
+            return prev.element;
+            
         } else {
             let prev;
             let curr = this.head;

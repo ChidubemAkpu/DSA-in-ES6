@@ -13,17 +13,19 @@ class Queue{
     }
 
     dequeue(){
-        this.queue.removeNodeAt(0);
         this.size = this.queue.size;
-        return this;
+        return this.queue.removeNodeAt(0);
     }
 
     printQueue(){
         this.queue.listAllNodes();
         return this;
     }
+
+    isEmpty(){
+        return !Boolean(this.size);
+    }
 }
 
-let myQueue = new Queue();
-myQueue.enqueue(56).enqueue(67).enqueue(56).enqueue(98).enqueue(09);
-console.log(myQueue)
+
+module.exports = {Queue};

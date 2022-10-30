@@ -1,68 +1,106 @@
+const {Queue} = require('./queue.js')
+class Node{
+    constructor(value) {
+        this.value = value;
+        this.adjacents = new Set();
+    }
+
+    adjacentNode(node){
+        this.adjacents.add(node);
+    }
+
+    removeAdjacent(node){
+        this.adjacents.delete(node)
+    }
+
+    isAdjacent(node){
+        return this.adjacents.has(node)
+    }
+
+    getAdjacents(){
+        return this.adjacents;
+    }
+
+}
+
 class Graph{
-    constructor(){
-        this.adjacencyList = {};
+    constructor(edgeDirection = Graph.DIRECTED){
+        this.nodes = new Map();
+        this.size = this.nodes.size;
+        this.edgeDirection = edgeDirection;
     }
-    
-    addNode(name){
-        if (!this.adjacencyList[name]){
-            this.adjacencyList[name] = new Set();
-        } else {
-            return 'Already exists!!'
+
+    addVertex(value){
+        if (this.nodes.has(value)){
+            return this.nodes.get(value)
         }
+        const vertex = new Node(value);
+        this.nodes.set(value, vertex);
+        this.size = this.nodes.size;
+        return this.nodes.get(value)
+    }
+
+    addEdge(source, destination){
+        const sourceNode = this.addVertex(source);
+        const destinationNode = this.addVertex(destination);
+        sourceNode.adjacentNode(destination);
+        if (this.edgeDirection === Graph.UNDIRECTED){
+            destinationNode.adjacentNode(source);
+        }
+        this.size = this.nodes.size;
+
+    }
+
+    removeVertex(node){
+        for (let eachNode of this.nodes.values()){
+            eachNode.removeAdjacent(node);
+        }
+        this.nodes.delete(node);
+        this.size = this.nodes.size;
+    }
+
+    removeEdge(source, destination){
+        const sourceNode = this.nodes.get(source);
+        const destinationNode = this.nodes.get(destination);
+        sourceNode.removeAdjacent(destination);
+        if (this.edgeDirection === Graph.UNDIRECTED){
+            destinationNode.removeAdjacent(source);
+        }
+        this.size = this.nodes.size;
+        return 'Removed!!!'
+    }
+
+    *bfs(first){
+        const visited = new Map();
+        const visitList = new Queue();
         
-    }
-    
-    addEdge(source, dest){
-        if (!this.adjacencyList[source]) {
-            this.addNode(source);
+        visitList.enqueue(first);
+        while(!visitList.isEmpty()){
+            const dequeuedItem = visitList.dequeue();
+            if(!visited.has(dequeuedItem)){
+                yield dequeuedItem;
+                visited.set(dequeuedItem, true);
+                Array.from(this.nodes.get(dequeuedItem).adjacents).forEach(adj => visitList.enqueue(adj));
+            }
+            
         }
-        if (!this.adjacencyList[dest]){
-            this.addNode(dest);
-        }
-        this.adjacencyList[source].add(dest);
-        this.adjacencyList[dest].add(source)
-    }
-
-    removeEdge(source, dest){
-        this.adjacencyList[source].delete(dest);
-        this.adjacencyList[dest].delete(source);
-    }
-
-    removeNode(node){
-        for (let eachItem of this.adjacencyList[node]){
-            this.removeEdge(node, eachItem)
-        }
-        delete this.adjacencyList[node];
-    }
-
-    bfs(start){
-        const queue = [start];
-        const result = [];
-        const visited = {};
-        visited[start] = true;
-        let currNode;
-        while(queue.length){
-            currNode = queue.shift();
-            result.push(currNode);
-            this.adjacencyList[currNode].forEach(neighbour => {
-                if (!visited[neighbour]) {
-                    visited[neighbour] = true;
-                    queue.push(neighbour)
-                }
-            })
-        }
-        return result;
-    }
 }
 
-const NodeObj = {}
-function returnNode(node){
-    NodeObj[node.val] = [];
-    for (let prop of node.neighbors){
-        NodeObj[node.val].push(prop.val);
-        returnNode(prop);
-    }
-    console.log(NodeObj);
 }
 
-console.log(returnNode())
+Graph.UNDIRECTED = Symbol('undirected graph');
+Graph.DIRECTED = Symbol('directed graph');
+
+
+const graph = new Graph(Graph.UNDIRECTED);
+graph.addEdge('Dubem', 'Chialuka');
+graph.addEdge('Chinyere', 'OlisaEmeka');
+graph.addEdge('Chuks', 'Chinyere');
+graph.addEdge('Chisom', 'Prosper');
+
+
+let theSearch = graph.bfs('Dubem');
+console.log(theSearch.next());
+console.log(theSearch.next());
+console.log(theSearch.next());
+
