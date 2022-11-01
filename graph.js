@@ -78,17 +78,15 @@ class Graph{
         visited.set(start,true);
         while(!notVisited.isEmpty()){
             const curr = notVisited.dequeue();
-            console.log(this.nodes.get(curr).adjacents)
             this.nodes.get(curr).adjacents.forEach(a => {
                 if (!visited.has(a)){
                     notVisited.enqueue(a);
-                }
-                
+                }  
             })
             yield curr;
         }
+        yield 'Ended!!!'
     }
-
 }
 
 Graph.UNDIRECTED = Symbol('undirected graph');
@@ -102,4 +100,7 @@ graph.addEdge('Chuks', 'Chinyere');
 graph.addEdge('Chisom', 'Prosper');
 
 
-let theSearch = graph.bfs('Dubem')
+let theSearch = graph.bfs('Dubem');
+console.log(theSearch.next());
+console.log(theSearch.next());
+console.log(theSearch.next());
