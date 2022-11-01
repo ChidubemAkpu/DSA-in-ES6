@@ -70,21 +70,24 @@ class Graph{
         return 'Removed!!!'
     }
 
-    *bfs(first){
+
+    *bfs(start){
         const visited = new Map();
-        const visitList = new Queue();
-        
-        visitList.enqueue(first);
-        while(!visitList.isEmpty()){
-            const dequeuedItem = visitList.dequeue();
-            if(!visited.has(dequeuedItem)){
-                yield dequeuedItem;
-                visited.set(dequeuedItem, true);
-                Array.from(this.nodes.get(dequeuedItem).adjacents).forEach(adj => visitList.enqueue(adj));
-            }
-            
+        const notVisited = new Queue();
+        notVisited.enqueue(start);
+        visited.set(start,true);
+        while(!notVisited.isEmpty()){
+            const curr = notVisited.dequeue();
+            console.log(this.nodes.get(curr).adjacents)
+            this.nodes.get(curr).adjacents.forEach(a => {
+                if (!visited.has(a)){
+                    notVisited.enqueue(a);
+                }
+                
+            })
+            yield curr;
         }
-}
+    }
 
 }
 
@@ -99,8 +102,4 @@ graph.addEdge('Chuks', 'Chinyere');
 graph.addEdge('Chisom', 'Prosper');
 
 
-let theSearch = graph.bfs('Dubem');
-console.log(theSearch.next());
-console.log(theSearch.next());
-console.log(theSearch.next());
-
+let theSearch = graph.bfs('Dubem')
