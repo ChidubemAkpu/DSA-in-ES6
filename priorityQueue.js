@@ -1,52 +1,30 @@
-const {Node, LinkedList} = require('./linkedList.js');
+const {Queue} = require('./queue.js');
 
-
-class PriorityQueue{
-    constructor(priority = PriorityQueue.ASCENDING){
-        this.queue = new LinkedList();
-        this.priority = priority;
-        this.size = this.queue.size;
-    }
-
-    enqueue(val){
-        const node = new Node(val);
+class PriorityQueue extends Queue{
+    
+    dequeueAscending(){
+        if (this.queue.head == null){
+            return
+        }
         let curr = this.queue.head;
-        if(!curr){
-            this.queue.addNode(val)
-            this.size = this.queue.size;
+        let checkerPrev = curr;
+        let checker = curr.next;
+        let prev;
+        while(checker){
+            if(checker.element < curr.element){
+                curr = checker;
+                prev = checkerPrev;
+            }
+            checkerPrev = checker;
+            checker = checker.next;
+        }
+        if(curr.next == null){
+            prev.next = null;
+            console.log(curr);
             return;
         }
-    
-            if (this.priority == PriorityQueue.ASCENDING){
-                for (let i=0; i<this.size; i++){
-                    if(curr.element >= node.element){
-                        this.queue.addNodeAt(val, i);
-                        this.size = this.queue.size;
-                        return;
-                    }
-                    curr = curr.next;
-                }
-                this.queue.addNode(val);
-                this.size = this.queue.size;
-            } else if (this.priority == PriorityQueue.DESCENDING){
-                for(let i=0; i<this.size; i++){
-                    if(curr.element <= node.element){
-                        this.queue.addNodeAt(val, i);
-                        this.size = this.queue.size;
-                        return;
-                    }
-                    curr = curr.next;      
-                }
-                this.queue.addNode(val);
-                this.size = this.queue.size;
-            }
-        
-    }
-
-    getNodes(){
-        return this.queue.listAllNodes();
-    }
+        prev.next = curr.next;
+        console.log(curr)
 }
-
-PriorityQueue.ASCENDING = Symbol('Ascending order');
-PriorityQueue.DESCENDING = Symbol('Descending order');
+}
+let p = new PriorityQueue();
